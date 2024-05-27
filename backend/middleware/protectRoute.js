@@ -17,6 +17,8 @@ const protectRoute = async (req, res, next) => {
 
     const currentUser = await User.findById(decoded.userId);
 
+
+    // add user-deined property to req object
     req.user = currentUser;
 
     next();
