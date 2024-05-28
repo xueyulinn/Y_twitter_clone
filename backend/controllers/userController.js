@@ -149,13 +149,18 @@ export const updateProfile = async (req, res) => {
         // modify imgs
         if (profileImg) {
             // "https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg"
-            await cloudinary.uploader.upload(profileImg,
-                { public_id: profileImg.split("/").pop().split(".")[0] });
+            if (currentUser.profileImg) {
+                await cloudinary.uploader.destroy(currentUser.profileImg.split("/").pop().split(".")[0]);
+            }
+            await cloudinary.uploader.upload(profileImg);
+
         }
 
         if (coverImg) {
-            await cloudinary.uploader.upload(coverImg,
-                { public_id: coverImg.split("/").pop().split(".")[0] });
+            if(currentUser.coverImg){
+                await cloudinary.uploader.destroy(currentUser.coverImg.split("/").pop().split(".")[0]);
+            }
+            await cloudinary.uploader.upload(coverImg);
         }
 
         currentUser.userName = userName || currentUser.userName;

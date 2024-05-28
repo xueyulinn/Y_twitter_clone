@@ -12,5 +12,4 @@ router.get("/getSuggestedUsers", protectRoute, getSuggestedUsers);
 
 router.put("/updateProfile", protectRoute, updateProfile);
 
-
 export default router;

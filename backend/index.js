@@ -1,6 +1,7 @@
 import express, { urlencoded } from "express";
 import AuthRoute from "./routes/authRoute.js";
 import UserRoute from "./routes/userRoute.js";
+import PostRoute from "./routes/postRoute.js";
 import DatabaseConnection from "./db/mongoDB_connec.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -35,4 +36,5 @@ app.listen(PORT, () => {
 
 app.use("/api/auth", AuthRoute);
 app.use("/api/user", UserRoute);
+app.use("/api/post", PostRoute);
 

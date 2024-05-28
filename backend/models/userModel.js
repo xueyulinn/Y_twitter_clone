@@ -53,7 +53,12 @@ const userSchema = new mongoose.Schema({
     coverImg: {
         type: String,
         default: ""
-    }
+    },
+
+    likedPosts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+    }],
 
 }, {
     timestamps: true
