@@ -1,17 +1,28 @@
-import { useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import RightPanel from './components/common/RightPanel.jsx'
+import Sidebar from './components/common/SideBar.jsx'
+import LoginPage from './pages/auth/login/loginPage.jsx'
+import SignupPage from './pages/auth/signup/signupPage.jsx'
+import HomePage from './pages/home/homePage.jsx'
+import NotificationPage from './pages/notification/NotificationPage.jsx'
+import ProfilePage from './pages/profile/ProfilePage.jsx'
+
+
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <button className="btn">Button</button>
-      <button className="btn btn-neutral">Neutral</button>
-      <button className="btn btn-primary">Primary</button>
-      <button className="btn btn-secondary">Secondary</button>
-      <button className="btn btn-accent">Accent</button>
-      <button className="btn btn-ghost">Ghost</button>
-      <button className="btn btn-link">Link</button>
-    </>
+    <div className='flex max-w-6xl mx-auto'>
+      <Sidebar />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/notifications' element={<NotificationPage />} />
+        <Route path='/profile/:username' element={<ProfilePage />} />
+      </Routes>
+      <RightPanel />
+
+    </div>
   );
 }
 
