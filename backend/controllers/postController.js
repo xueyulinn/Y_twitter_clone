@@ -16,7 +16,6 @@ export const createPost = (async (req, res) => {
         });
 
 
-
         const currentUser = await User.findById(_id);
 
 

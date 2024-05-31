@@ -1,9 +1,36 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
-import { USERS_FOR_RIGHT_PANEL } from "../../utils/db/dummy";
 
 const RightPanel = () => {
-	const isLoading = false;
+
+	const { data: USERS_FOR_RIGHT_PANEL, isLoading } = useQuery({
+		queryKey: ["suggestedUsers"],
+		queryFn: async () => {
+
+			try {
+
+				const res = await fetch("/api/user/getSuggestedUsers");
+
+				if (!res.ok) {
+					throw new Error("An error occurred while fetching suggested users");
+				}
+
+				return res.json();
+			} catch (error) {
+
+				throw new Error(error.message);
+
+			}
+
+		}
+
+	});
+
+	if (USERS_FOR_RIGHT_PANEL?.length === 0) {
+		return (<div className="md: w-64"></div>);
+	}
+
 
 	return (
 		<div className='hidden lg:block my-4 mx-2'>
