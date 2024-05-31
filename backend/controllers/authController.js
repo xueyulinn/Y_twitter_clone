@@ -83,7 +83,7 @@ export const login = async (req, res) => {
         const user2 = await bcrypt.compare(password, !user1 ? "" : user1.password);
 
         if (!user1 || !user2) {
-            return res.status(400).json({ message: "Invalid userName or password" });
+            return res.status(400).json({ message: "Invalid username or password" });
         }
 
         generateTokenAndCookie(user1._id, res);
@@ -116,7 +116,6 @@ export const logout = async (req, res) => {
 export const getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select('-password');
-
         res.json(user);
     } catch (error) {
         console.log('error in getMe', error.message);
