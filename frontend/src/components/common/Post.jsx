@@ -5,25 +5,65 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const Post = ({ post }) => {
 	const [comment, setComment] = useState("");
 	const postOwner = post.user;
 	const isLiked = false;
 
-	const isMyPost = true;
+	const queryClient = useQueryClient();
+
+	const { data: User } = useQuery({
+		queryKey: ['authUser']
+	});
+
+	const isMyPost = User._id === post.user._id;
 
 	const formattedDate = "1h";
 
 	const isCommenting = false;
 
-	const handleDeletePost = () => {};
+	const { mutate: deleteMutation, isPending } = useMutation({
+		mutationFn: async () => {
+			try {
+				// delete post
+				const res = await fetch(`/api/post/delete/${post._id}`, {
+					method: "DELETE"
+				});
+
+				if (!res.ok) {
+					throw new Error("Error while deleting post");
+				}
+
+				const data = res.json();
+
+				return data;
+
+			} catch (error) {
+				throw new Error("Error while deleting post");
+			}
+		},
+		onSuccess: () => {
+			toast.success("Post deleted successfully");
+			queryClient.invalidateQueries({
+				queryKey: ['posts']
+			});
+
+		}
+	});
+
+	const handleDeletePost = () => {
+		deleteMutation();
+	};
 
 	const handlePostComment = (e) => {
 		e.preventDefault();
 	};
 
-	const handleLikePost = () => {};
+	const handleLikePost = () => { };
 
 	return (
 		<>
@@ -45,7 +85,8 @@ const Post = ({ post }) => {
 						</span>
 						{isMyPost && (
 							<span className='flex justify-end flex-1'>
-								<FaTrash className='cursor-pointer hover:text-red-500' onClick={handleDeletePost} />
+								{!isPending && <FaTrash className='cursor-pointer hover:text-red-500' onClick={handleDeletePost} />}
+								{isPending && (<LoadingSpinner size="sm" />)}
 							</span>
 						)}
 					</div>
@@ -135,9 +176,8 @@ const Post = ({ post }) => {
 								{isLiked && <FaRegHeart className='w-4 h-4 cursor-pointer text-pink-500 ' />}
 
 								<span
-									className={`text-sm text-slate-500 group-hover:text-pink-500 ${
-										isLiked ? "text-pink-500" : ""
-									}`}
+									className={`text-sm text-slate-500 group-hover:text-pink-500 ${isLiked ? "text-pink-500" : ""
+										}`}
 								>
 									{post.likes.length}
 								</span>

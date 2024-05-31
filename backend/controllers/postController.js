@@ -167,7 +167,8 @@ export const getAllPosts = (async (req, res) => {
                 select: " _id userName profileImg"
             });
 
-        if (!allPosts) {
+        // empty array is truthy 
+        if (!allPosts || allPosts.length === 0) {
             return res.status(404).json({ message: "Posts not found" });
         }
 

@@ -24,7 +24,7 @@ function App() {
 
         // when logout the server will return a 401 status code
         // and data will be null thus navigate to login page
-        if(res.status === 401) {
+        if (res.status === 401) {
           return null;
         }
 
@@ -55,7 +55,7 @@ function App() {
 
   return (
     <div className='flex max-w-6xl mx-auto'>
-      <Sidebar />
+      {data && <Sidebar />}
       <Routes>
         <Route path='/' element={data ? <HomePage /> : <Navigate to="/login" />} />
         <Route path='/signup' element={!data ? <SignupPage /> : <Navigate to="/" />} />
@@ -63,7 +63,7 @@ function App() {
         <Route path='/notifications' element={!data ? <NotificationPage /> : <Navigate to="/login" />} />
         <Route path='/profile/:username' element={!data ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
-      <RightPanel />
+      {data && <RightPanel />}
       <Toaster />
     </div>
   );
