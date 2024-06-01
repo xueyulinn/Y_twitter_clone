@@ -23,10 +23,11 @@ const RightPanel = () => {
 			} catch (error) {
 
 				throw new Error(error.message);
-
 			}
-
-		}
+		},
+		staleTime: 5 * 60 * 1000, // 数据在5分钟内不会被视为陈旧
+		cacheTime: 30 * 60 * 1000, // 数据在卸载后的30分钟内会被缓存
+		retry: false,
 
 	});
 
@@ -36,8 +37,6 @@ const RightPanel = () => {
 
 	// user-defined hook as it's used on multiple components
 	const { follow, isPending } = useFollow();
-
-
 
 	return (
 		<div className='hidden lg:block my-4 mx-2'>

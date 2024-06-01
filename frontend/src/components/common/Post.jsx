@@ -51,7 +51,6 @@ const Post = ({ post }) => {
 			queryClient.invalidateQueries({
 				queryKey: ['posts']
 			});
-
 		}
 	});
 

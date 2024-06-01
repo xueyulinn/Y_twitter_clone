@@ -24,8 +24,6 @@ const Posts = ({ feedType }) => {
 
 				const res = await fetch(requestPath);
 
-				console.log('res', res);
-
 				if (res.status === 404) {
 					return [];
 				}
@@ -41,6 +39,9 @@ const Posts = ({ feedType }) => {
 				throw new Error('Error while fetching posts');
 			}
 		},
+		staleTime: 5 * 60 * 1000, // 数据在5分钟内不会被视为陈旧
+        cacheTime: 30 * 60 * 1000, // 数据在卸载后的30分钟内会被缓存
+        retry: false,
 	});
 
 	useEffect(() => {
