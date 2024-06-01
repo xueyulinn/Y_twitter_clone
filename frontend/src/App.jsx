@@ -34,7 +34,9 @@ function App() {
           throw new Error('Unauthorized User');
         }
 
-        return res.json();
+        const data = await res.json();
+
+        return data;
 
       } catch (error) {
         console.error(error.message);
@@ -61,7 +63,7 @@ function App() {
         <Route path='/signup' element={!data ? <SignupPage /> : <Navigate to="/" />} />
         <Route path='/login' element={!data ? <LoginPage /> : <Navigate to="/" />} />
         <Route path='/notifications' element={data ? <NotificationPage /> : <Navigate to="/login" />} />
-        <Route path='/profile/:username' element={data ? <ProfilePage /> : <Navigate to="/login" />} />
+        <Route path='/profile/:userName' element={data ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
       {data && <RightPanel />}
       <Toaster />

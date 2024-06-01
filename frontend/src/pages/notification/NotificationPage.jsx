@@ -51,7 +51,7 @@ const NotificationPage = () => {
 					if (!res.ok) {
 						throw new Error("An error occurred while deleting notifications");
 					}
-					
+
 
 				} catch (error) {
 					throw new Error("An error occurred while deleting notifications");
@@ -65,7 +65,7 @@ const NotificationPage = () => {
 					}
 				);
 			},
-			
+
 			onError: (error) => {
 				toast.error(error.message);
 			},

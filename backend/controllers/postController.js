@@ -181,7 +181,7 @@ export const getAllPosts = (async (req, res) => {
 
 export const getLikedPosts = (async (req, res) => {
     try {
-        const { _id: userId } = req.user._id;
+        const { id: userId } = req.params;
 
         const currentUser = await User.findById(userId);
 

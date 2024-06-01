@@ -13,9 +13,9 @@ const Sidebar = () => {
 
 	const queryClient = useQueryClient();
 
-	const { data } = useQuery({ queryKey: ['authUser'], });
+	const { data } = useQuery({ queryKey: ['authUser'] });
 
-	const { mutate, error } = useMutation({
+	const { mutate } = useMutation({
 		mutationFn: async () => {
 			try {
 				const res = await fetch('/api/auth/logout', {

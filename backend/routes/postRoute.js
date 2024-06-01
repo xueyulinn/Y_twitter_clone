@@ -15,7 +15,7 @@ router.post('/comment/:id', protectRoute, comment);
 
 router.get('/all', protectRoute, getAllPosts);
 
-router.get('/like', protectRoute, getLikedPosts);
+router.get('/like/:id', protectRoute, getLikedPosts);
 
 router.get('/following', protectRoute, getFollowingPosts);
 

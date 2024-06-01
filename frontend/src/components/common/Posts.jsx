@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import PostSkeleton from "../skeletons/PostSkeleton";
 import Post from "./Post";
-import { useEffect } from 'react';
+import { useEffect, useParams } from 'react';
 
-const Posts = ({ feedType }) => {
+const Posts = ({ feedType, id, userName }) => {
+
 
 	const getRequestPath = (feedType) => {
 		switch (feedType) {
@@ -11,6 +12,10 @@ const Posts = ({ feedType }) => {
 				return "/api/post/all"
 			case "following":
 				return "/api/post/following"
+			case "likes":
+				return `/api/post/like/${id}`
+			case "posts":
+				return `/api/post/${userName}`
 			default:
 				return "/api/post/all"
 		}
@@ -32,7 +37,9 @@ const Posts = ({ feedType }) => {
 					throw new Error('Error while fetching posts');
 				}
 
-				return res.json();
+				const data = await res.json();
+
+				return data;
 
 			} catch (error) {
 				console.error(error.message);
@@ -40,8 +47,8 @@ const Posts = ({ feedType }) => {
 			}
 		},
 		staleTime: 5 * 60 * 1000, // 数据在5分钟内不会被视为陈旧
-        cacheTime: 30 * 60 * 1000, // 数据在卸载后的30分钟内会被缓存
-        retry: false,
+		cacheTime: 30 * 60 * 1000, // 数据在卸载后的30分钟内会被缓存
+		retry: false,
 	});
 
 	useEffect(() => {
