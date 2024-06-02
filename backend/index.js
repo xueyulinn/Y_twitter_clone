@@ -8,6 +8,7 @@ import DatabaseConnection from "./db/mongoDB_connec.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from 'cloudinary';
+import path from "path";
 
 
 // load .env file into process.dev 
@@ -20,12 +21,18 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
+
+// get the current directory
+const __dirname = path.resolve();
+
 const app = express();
 
 // we need middleware to parse requests
 app.use(express.json(
   { limit: "2mb" }
 ));
+
+
 
 app.use(cookieParser());
 
@@ -43,3 +50,12 @@ app.use("/api/user", UserRoute);
 app.use("/api/post", PostRoute);
 app.use("/api/notification", NotificationRoute);
 
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "../frontend/dist");
+
+  app.use(express.static(frontendPath));
+  // serve the index.html file if the route is not found
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(frontendPath, "index.html"))
+  })
+};

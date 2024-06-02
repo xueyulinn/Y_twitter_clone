@@ -32,7 +32,7 @@ const ProfilePage = () => {
 
 	const { userName } = useParams();
 
-	const { updateProfile } = useUpdateProfile();
+	const {  updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
 
 	const { follow, isPending } = useFollow();
 
@@ -58,6 +58,8 @@ const ProfilePage = () => {
 				throw new Error(error.message);
 			}
 		},
+
+
 
 		onError: (error) => {
 			toast.error(error.message);
@@ -162,11 +164,13 @@ const ProfilePage = () => {
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={() => {
-											updateProfile({ coverImg, profileImg });
+										onClick={async() => {
+											await updateProfile({ coverImg, profileImg })
+											setCoverImg(null);
+											setProfileImg(null);
 										}}
 									>
-										Update
+										{isUpdatingProfile ? <LoadingSpinner /> : "Save"}
 									</button>
 								)}
 							</div>
@@ -184,12 +188,12 @@ const ProfilePage = () => {
 											<>
 												<FaLink className='w-3 h-3 text-slate-500' />
 												<a
-													href='https://youtube.com/@asaprogrammer_'
+													href='https://github.com/xueyulinn'
 													target='_blank'
 													rel='noreferrer'
 													className='text-sm text-blue-500 hover:underline'
 												>
-													youtube.com/@asaprogrammer_
+													xueyulinn_github
 												</a>
 											</>
 										</div>

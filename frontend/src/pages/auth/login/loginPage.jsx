@@ -77,7 +77,7 @@ const LoginPage = () => {
 						<input
 							type='text'
 							className='grow'
-							placeholder='userName'
+							placeholder='Username'
 							name='userName'
 							onChange={handleInputChange}
 							value={formData.userName}
