@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 export const getUserProfile = async (req, res) => {
 
-    const { userName } =  req.params;
+    const { userName } = req.params;
 
     try {
         const currentUser = await User.findOne({ userName }).select("-password");
@@ -101,23 +101,23 @@ export const getSuggestedUsers = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-    const { userName, fullName, email, bio, newPassword, oldPassword, link } = req.body;
+    const { userName, fullName, email, bio, newPassword, currentPassword, link } = req.body;
     let { profileImg, coverImg } = req.body;
 
     try {
         const currentUser = await User.findById(req.user._id);
 
         // validate password
-        if ((!newPassword && oldPassword) || (!oldPassword && newPassword)) {
+        if ((!newPassword && currentPassword) || (!currentPassword && newPassword)) {
             return res.status(400).json({ message: "Please enter both old and new password" });
         }
 
-        if (newPassword && oldPassword) {
+        if (newPassword && currentPassword) {
             if (newPassword.length < 6) {
                 return res.status(400).json({ message: "Password must be at least 6 characters" });
             }
 
-            const isCorrect = await bcrypt.compare(oldPassword, currentUser.password);
+            const isCorrect = await bcrypt.compare(currentPassword, currentUser.password);
 
             if (!isCorrect) {
                 return res.status(400).json({ message: "Incorrect old password" });
@@ -158,7 +158,7 @@ export const updateProfile = async (req, res) => {
         }
 
         if (coverImg) {
-            if(currentUser.coverImg){
+            if (currentUser.coverImg) {
                 await cloudinary.uploader.destroy(currentUser.coverImg.split("/").pop().split(".")[0]);
             }
             await cloudinary.uploader.upload(coverImg);

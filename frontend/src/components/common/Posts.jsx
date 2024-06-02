@@ -54,7 +54,7 @@ const Posts = ({ feedType, id, userName }) => {
 	useEffect(() => {
 		// when feedType changes, refetch the data
 		refetch();
-	}, [feedType]);
+	}, [feedType, userName, id]);
 
 	return (
 		<>

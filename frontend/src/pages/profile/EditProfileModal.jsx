@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import useUpdateProfile from "../../hooks/useUpdateProfile";
 
 const EditProfileModal = () => {
 	const [formData, setFormData] = useState({
@@ -11,9 +13,34 @@ const EditProfileModal = () => {
 		currentPassword: "",
 	});
 
+
+	const { data: user } = useQuery({
+		queryKey: ["authUser"]
+	});
+
+	const { updateProfile } = useUpdateProfile();
+
+
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
+
+	const handleSubmit = (e) => {
+		updateProfile(formData);
+	};
+
+	useEffect(() => {
+		if (user) {
+			setFormData({
+				fullName: user.fullName,
+				username: user.userName,
+				email: user.email,
+				bio: user.bio,
+				link: user.link,
+			});
+		}
+	}, [user]);
+
 
 	return (
 		<>
@@ -30,7 +57,7 @@ const EditProfileModal = () => {
 						className='flex flex-col gap-4'
 						onSubmit={(e) => {
 							e.preventDefault();
-							alert("Profile updated successfully");
+							handleSubmit();
 						}}
 					>
 						<div className='flex flex-wrap gap-2'>

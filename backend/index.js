@@ -23,7 +23,9 @@ cloudinary.config({
 const app = express();
 
 // we need middleware to parse requests
-app.use(express.json());
+app.use(express.json(
+  { limit: "2mb" }
+));
 
 app.use(cookieParser());
 

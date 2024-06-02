@@ -14,8 +14,11 @@ import { MdEdit } from "react-icons/md";
 import { formatMemberSinceDate } from "../../utils/date/index.js";
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
+import useFollow from "../../hooks/useFollow.jsx";
 import { toast } from 'react-hot-toast';
+import LoadingSpinner from "../../components/common/LoadingSpinner.jsx";
+import useUpdateProfile from "../../hooks/useUpdateProfile.jsx";
+
 
 const ProfilePage = () => {
 	const [coverImg, setCoverImg] = useState(null);
@@ -29,8 +32,11 @@ const ProfilePage = () => {
 
 	const { userName } = useParams();
 
-	const loginUser = queryClient.getQueryData(['authUser']);
+	const { updateProfile } = useUpdateProfile();
 
+	const { follow, isPending } = useFollow();
+
+	const loginUser = queryClient.getQueryData(['authUser']);
 
 	const { data: user, isLoading, refetch, isRefetching } = useQuery({
 		queryKey: ["profile"],
@@ -145,15 +151,20 @@ const ProfilePage = () => {
 								{!isMyProfile && (
 									<button
 										className='btn btn-outline rounded-full btn-sm'
-										onClick={() => alert("Followed successfully")}
+										onClick={() => {
+											follow(user?._id);
+										}}
 									>
-										Follow
+										{isPending && <LoadingSpinner />}
+										{!isPending && user?.followers.includes(loginUser?._id) ? "Unfollow" : "Follow"}
 									</button>
 								)}
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={() => alert("Profile updated successfully")}
+										onClick={() => {
+											updateProfile({ coverImg, profileImg });
+										}}
 									>
 										Update
 									</button>

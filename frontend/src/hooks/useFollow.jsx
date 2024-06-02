@@ -22,12 +22,18 @@ const useFollow = () => {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["suggestedUsers"]
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["authUser"]
-            });
+            // ensure every invalidated query is completed
+            Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: ["suggestedUsers"]
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ["authUser"]
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ["profile"]
+                }),
+            ])
         },
 
         onError: (error) => {
@@ -40,4 +46,4 @@ const useFollow = () => {
     )
 }
 
-export default useFollow
+export default useFollow;
